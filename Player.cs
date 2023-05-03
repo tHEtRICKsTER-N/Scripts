@@ -14,8 +14,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float _runSpeed;
     [SerializeField] private float _crouchSpeed;
     [SerializeField] private Transform _camRoot;
+    [SerializeField] private Transform _crouchPosition;
+    [SerializeField] private Transform _standPosition;
     [SerializeField] private float _sensitivity;
     [SerializeField] private float _jumpAmount;
+    [SerializeField] private float _crouchSmooth;
     
 
     [Header("Private Vars")]
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     float verticalRotation;
     Vector3 movement;
     float currSpeed;
+    bool isCrouching = false;
 
     //this will be used to know if player died or not
     public bool gameOver = false;
@@ -61,13 +65,24 @@ public class Player : MonoBehaviour
 
         //crouching
         if (Input.GetKey(_crouchKey) && _charCon.isGrounded){
-            transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-            currSpeed = _crouchSpeed;
+            isCrouching = true;
+        }
+        else if(Input.GetKeyUp(_crouchKey))
+        {
+            isCrouching = false;
+        }
 
-        }else if(Input.GetKeyUp(_crouchKey)){
-            transform.localScale = new Vector3(1,1,1);
+        if (isCrouching)
+        {
+            _camRoot.transform.position = Vector3.Lerp(_camRoot.transform.position,_crouchPosition.position,Time.deltaTime * _crouchSmooth);
+            currSpeed = _crouchSpeed;
+        }
+        else
+        {
+            _camRoot.transform.position = Vector3.Lerp(_camRoot.transform.position,_standPosition.position,Time.deltaTime * _crouchSmooth);
             currSpeed = _walkSpeed;
         }
+
 
         //running
         if(Input.GetKey(_runKey)){
