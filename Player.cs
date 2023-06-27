@@ -5,20 +5,20 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("--CONTROLS--")]
-    [SerializeField] private KeyCode _crouchKey;
-    [SerializeField] private KeyCode _jumpKey;
-    [SerializeField] private KeyCode _runKey;
+    [SerializeField] private KeyCode _crouchKey = KeyCode.LeftControl;
+    [SerializeField] private KeyCode _jumpKey = KeyCode.Space;
+    [SerializeField] private KeyCode _runKey = KeyCode.LeftShift;
 
     [Header("--MOVEMENT AND AIMING--")]
-    [SerializeField] private float _walkSpeed;
-    [SerializeField] private float _runSpeed;
-    [SerializeField] private float _crouchSpeed;
+    [SerializeField] private float _walkSpeed = 2.5f;
+    [SerializeField] private float _runSpeed = 5;
+    [SerializeField] private float _crouchSpeed = 1;
     [SerializeField] private Transform _camRoot;
     [SerializeField] private Transform _crouchPosition;
     [SerializeField] private Transform _standPosition;
-    [SerializeField] private float _sensitivity;
-    [SerializeField] private float _jumpAmount;
-    [SerializeField] private float _crouchSmooth;
+    [SerializeField] private float _sensitivity = 0.3f;
+    [SerializeField] private float _jumpAmount = 3.5f;
+    [SerializeField] private float _crouchSmooth = 3;
     
 
     [Header("Private Vars")]
@@ -26,15 +26,18 @@ public class Player : MonoBehaviour
     float verticalRotation;
     Vector3 movement;
     float currSpeed;
-    bool isCrouching = false;
+    bool isCrouching;
 
     //this will be used to know if player died or not
-    public bool gameOver = false;
+    public bool gameOver;
 
     void Start()
     {
         _charCon = GetComponent<CharacterController>();
         currSpeed = _walkSpeed;
+
+        isCrouching = false;
+        gameOver = false;
     }
 
     void Update()
